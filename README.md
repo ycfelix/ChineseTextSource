@@ -1,1 +1,3 @@
 # ChineseTextSource
+
+A dictionary app to find the source of a given chinese Character.
