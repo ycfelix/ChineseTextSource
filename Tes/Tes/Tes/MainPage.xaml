@@ -5,10 +5,21 @@
              x:Class="Tes.MainPage">
 
     <StackLayout>
+
+            
+       
         <!-- Place new controls here -->
-        <Label Text="Welcome to Xamarin.Forms!" 
+        <Button Text=" click me try try" HorizontalOptions="Center"
+           VerticalOptions="CenterAndExpand"  BackgroundColor="Blue" WidthRequest="250" HeightRequest="40" />
+        <Entry Text="Input your chinese bushou" />
+        <Entry Text="output result" />
+        <Button Text="Click to do processing!"
+                VerticalOptions="CenterAndExpand"
+                HorizontalOptions="Center" />
+        <Label Text="this app is done by felix and timmy!" 
            HorizontalOptions="Center"
            VerticalOptions="CenterAndExpand" />
+         
     </StackLayout>
 
 </ContentPage>
