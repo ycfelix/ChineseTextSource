@@ -1,8 +1,20 @@
-import ctext
 import json
-from time import sleep
+import requests
 from typing import List, Dict
-from ratelimit import limits, sleep_and_retry
+
+ctp_base = "http://api.ctext.org"
+
+
+def gettext(urn):
+    return ctpapicall("gettext?urn="+urn)
+
+
+def ctpapicall(querystring):
+    response = requests.get(ctp_base+"/"+querystring, cookies=cookies).text
+    data = json.loads(response)
+    if('error' in data):
+        raise Exception('CTP API Error', data['error']['code'], data['error']['description'])
+    return data
 
 
 def produce_urls_list()-> List:
@@ -16,14 +28,12 @@ def produce_urls_list()-> List:
 
 
 def get_text_from_url(url: str)-> Dict:
-    return ctext.gettext("ctp:"+url)
+    return gettext("ctp:"+url)
 
 
 def get_data_from_urls(urls: List):
-    # hardcoded api call limit which should be 50 per day/hour or sth
-    # 0:49 done
     calling = 0
-    for url in urls[50:100]:
+    for url in urls[452:]:
         raw_text = get_text_from_url(url)
         file_title = 'data/' + raw_text['title'] + '.json'
         with open(file_title, "w", encoding='utf-8') as f:
@@ -31,9 +41,12 @@ def get_data_from_urls(urls: List):
         print("Got " + raw_text['title'])
         calling += 1
         if calling % 50 == 0:
-            print("Finished call " + str(calling))
+            print("Finished calling " + str(calling))
 
 
 if __name__ == "__main__":
+    global cookies
+    cookies = {}
+    requests.get("http://api.ctext.org/getstatus", cookies=cookies)
     urls_list = produce_urls_list()
     get_data_from_urls(urls_list)
